@@ -3,9 +3,13 @@ type IProps<C extends React.ElementType> = {
   children: React.ReactNode;
 } & React.ComponentPropsWithRef<C>;
 
-const Text = <C extends React.ElementType>({ as, children }: IProps<C>) => {
+const Text = <C extends React.ElementType>({
+  as,
+  children,
+  ...restProps
+}: IProps<C>) => {
   const Component = as || "span";
-  return <Component>{children}</Component>;
+  return <Component {...restProps}>{children}</Component>;
 };
 
 export default Text;

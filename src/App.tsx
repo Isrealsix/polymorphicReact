@@ -8,6 +8,7 @@ function App() {
       <Text as="h1">Hello</Text>
       <Text as="h2">Hello</Text>
       <Text>Hello</Text>
+      <Text as='a' href='http://google.com'>Google</Text>
     </div>
   );
 }
