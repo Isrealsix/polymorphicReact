@@ -33,13 +33,22 @@ type TextProps = {
 type PolymorphicRef<C extends React.ElementType> = React.ComponentPropsWithRef<C>["ref"]
 
 type Props<C extends React.ElementType, P> = PolymorphicComponentProps<C, P>;
-const Text = React.forwardRef(
+
+
+// Combined ref item with component props
+type PolymorphicComponentPropsWithRef<C extends React.ElementType, P> = PolymorphicComponentProps<C, P> & {
+  ref?: PolymorphicRef<C>
+}
+
+type TextComponent = <C extends React.ElementType>(props: PolymorphicComponentPropsWithRef<C, TextProps>) => React.ReactElement | null;
+
+const Text: TextComponent = React.forwardRef(
   <C extends React.ElementType = "span">(
     { as, style, children, ...restProps }: Props<C, TextProps>,
     ref?: PolymorphicRef<C>
   ) => {
     const Component = as || "span";
-    return <Component {...restProps}>{children}</Component>;
+    return <Component {...restProps} ref={ref}>{children}</Component>;
   }
 );
 
