@@ -1,3 +1,5 @@
+import React from "react";
+
 type RGB = "red" | "green" | "blue";
 
 type AsProp<C extends React.ElementType> = {
@@ -23,17 +25,22 @@ type PolymorphicComponentProps<
 > = React.PropsWithChildren<Props & AsProp<C>> &
   Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
 
-  type TextProps = {
-    color?: RGB | "black";
-  }
-const Text = <C extends React.ElementType = "span">({
-  as,
-  style,
-  children,
-  ...restProps
-}: PolymorphicComponentProps<C, TextProps>) => {
-  const Component = as || "span";
-  return <Component {...restProps}>{children}</Component>;
+type TextProps = {
+  color?: RGB | "black";
 };
+
+// Specifying component props with ref and taking only the ref elements
+type PolymorphicRef<C extends React.ElementType> = React.ComponentPropsWithRef<C>["ref"]
+
+type Props<C extends React.ElementType, P> = PolymorphicComponentProps<C, P>;
+const Text = React.forwardRef(
+  <C extends React.ElementType = "span">(
+    { as, style, children, ...restProps }: Props<C, TextProps>,
+    ref?: PolymorphicRef<C>
+  ) => {
+    const Component = as || "span";
+    return <Component {...restProps}>{children}</Component>;
+  }
+);
 
 export default Text;
